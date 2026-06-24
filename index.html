@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Мета-теги для iOS (Apple) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Тугай ТТК">
     <title>Тугай ТТК</title>
     <style>
         /* Apple-style Typography & Reset */
@@ -12,6 +16,7 @@
             --bg-search: #1C1C1E;
             --accent: #0A84FF; /* Apple Blue */
             --accent-pf: #30D158; /* Apple Green */
+            --accent-danger: #FF453A; /* Apple Red */
             --text-main: #FFFFFF;
             --text-sec: #EBEBF599; /* Muted Apple text */
             --border-color: rgba(255, 255, 255, 0.1);
@@ -25,7 +30,7 @@
             background-color: var(--bg-base);
             color: var(--text-main);
             margin: 0;
-            padding: 20px 16px 60px;
+            padding: 20px 16px 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -69,10 +74,11 @@
             color: var(--text-sec);
             padding: 10px;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
@@ -124,13 +130,18 @@
             border-color: var(--text-main);
         }
 
+        /* Container for Cards & Checklist */
+        .content-container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
         /* Cards Layout */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 16px;
             width: 100%;
-            max-width: 1000px;
         }
 
         /* Card Apple Style */
@@ -146,108 +157,79 @@
 
         .card:active { transform: scale(0.98); }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-title {
-            font-size: 19px;
-            font-weight: 600;
-            margin: 0;
-            color: var(--text-main);
-        }
-
-        .chevron {
-            color: var(--text-sec);
-            transition: transform 0.3s ease;
-            font-size: 14px;
-        }
-
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 19px; font-weight: 600; margin: 0; color: var(--text-main); }
+        .chevron { color: var(--text-sec); transition: transform 0.3s ease; font-size: 14px; }
         .card.open .chevron { transform: rotate(180deg); }
 
-        /* Content inside card */
-        .card-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.3s ease-out;
-        }
-
+        .card-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out; }
         .card-content-inner { overflow: hidden; }
+        .card.open .card-content { grid-template-rows: 1fr; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px; }
 
-        .card.open .card-content {
-            grid-template-rows: 1fr;
-            margin-top: 16px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
-        }
+        .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .tag { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--text-sec); }
 
-        .tags {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: rgba(255,255,255,0.1);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-sec);
-        }
-
-        .section-title {
-            color: var(--text-sec);
-            font-size: 13px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        .method {
-            font-size: 15px;
-            line-height: 1.5;
-            color: var(--text-main);
-            margin-bottom: 10px;
-        }
-
+        .section-title { color: var(--text-sec); font-size: 13px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .method { font-size: 15px; line-height: 1.5; color: var(--text-main); margin-bottom: 10px; }
         ul { margin: 0 0 16px 0; padding-left: 20px; color: var(--text-main); font-size: 15px; line-height: 1.6;}
         li { margin-bottom: 4px; }
 
         /* Calculator Styles */
         .calc-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            background: rgba(48, 209, 88, 0.1);
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(48, 209, 88, 0.3);
+            display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+            background: rgba(48, 209, 88, 0.1); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(48, 209, 88, 0.3);
         }
-
         .calc-label { font-size: 14px; color: var(--accent-pf); font-weight: 600; }
-        
         .calc-input {
-            background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 8px;
-            width: 80px;
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-            outline: none;
+            background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: #fff;
+            padding: 6px 10px; border-radius: 8px; width: 80px; font-size: 16px; font-weight: 600; text-align: center; outline: none;
         }
         .calc-input:focus { border-color: var(--accent-pf); }
-        .calc-unit { font-size: 14px; color: var(--text-sec); }
-
         .pf-ing-amount { font-weight: 700; color: var(--accent-pf); transition: color 0.2s;}
+
+        /* Checklist Styles */
+        #checklist-container { display: none; width: 100%; flex-direction: column; gap: 16px; }
+        .cl-input-group { display: flex; gap: 10px; }
+        .cl-input {
+            flex: 1; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--bg-search); color: white; font-size: 16px; outline: none;
+        }
+        .cl-input:focus { border-color: var(--accent); }
+        .cl-btn {
+            background: var(--accent); color: white; border: none; padding: 0 20px; border-radius: 12px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .cl-btn:active { transform: scale(0.95); opacity: 0.8; }
+        
+        .cl-list { display: flex; flex-direction: column; gap: 10px; }
+        .cl-item {
+            background: var(--bg-card); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            transition: 0.2s;
+        }
+        .cl-item.done { opacity: 0.6; }
+        .cl-item.done .cl-text { text-decoration: line-through; color: var(--text-sec); }
+        
+        .cl-checkbox {
+            width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text-sec);
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; flex-shrink: 0;
+        }
+        .cl-item.done .cl-checkbox { background: var(--accent); border-color: var(--accent); }
+        .cl-item.done .cl-checkbox::after { content: "✓"; color: white; font-size: 14px; font-weight: bold; }
+        
+        .cl-text { flex: 1; font-size: 16px; color: var(--text-main); word-break: break-word; transition: 0.2s; cursor: pointer; }
+        
+        .cl-delete {
+            background: rgba(255, 69, 58, 0.15); color: var(--accent-danger); border: none; width: 32px; height: 32px;
+            border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+
+        /* PWA Install Button */
+        #install-btn {
+            display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: white; color: black; border: none; padding: 12px 24px; border-radius: 20px;
+            font-size: 15px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1000; cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -257,25 +239,42 @@
     <div class="controls">
         <div class="segment-control">
             <button id="btn-drinks" class="tab-btn active" onclick="switchTab('drinks')">Напитки</button>
-            <button id="btn-pf" class="tab-btn" onclick="switchTab('pf')">ПФ (Заготовки)</button>
+            <button id="btn-pf" class="tab-btn" onclick="switchTab('pf')">ПФ (База)</button>
+            <button id="btn-checklist" class="tab-btn" onclick="switchTab('checklist')">Чек-лист</button>
         </div>
         
         <input type="text" id="search" class="search-bar" placeholder="Поиск (название, состав)..." onkeyup="filterCards()">
         
-        <!-- Filters (Only visible on Drinks tab) -->
         <div class="filters" id="drink-filters">
             <div class="filter-pill active" onclick="setFilter('all', this)">Все</div>
             <div class="filter-pill" onclick="setFilter('cocktail', this)">Коктейли</div>
             <div class="filter-pill" onclick="setFilter('lemonade', this)">Лимонады</div>
             <div class="filter-pill" onclick="setFilter('smoothie', this)">Смузи</div>
-            <div class="filter-pill" onclick="setFilter('nonalk', this)">Безалкогольные</div>
+            <div class="filter-pill" onclick="setFilter('nonalk', this)">Б/А</div>
         </div>
     </div>
 
-    <div class="grid" id="cards-container"></div>
+    <div class="content-container">
+        <!-- Сетка с карточками меню -->
+        <div class="grid" id="cards-container"></div>
+
+        <!-- Чек-лист (Скрыт по умолчанию) -->
+        <div id="checklist-container">
+            <div class="cl-input-group">
+                <input type="text" id="new-task" class="cl-input" placeholder="Добавить задачу (напр. сварить сироп)..." onkeypress="handleTaskEnter(event)">
+                <button class="cl-btn" onclick="addTask()">Плюс</button>
+            </div>
+            <div class="cl-list" id="task-list">
+                <!-- Задачи будут тут -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка установки приложения -->
+    <button id="install-btn">Установить приложение</button>
 
     <script>
-        // База данных. В ПФ-ки я добавил baseVol (базовый объем в мл) для калькулятора.
+        // --- БАЗА ДАННЫХ ---
         const data = {
             drinks: [
                 { category: "cocktail", name: "Апероль Спритц", glass: "Бокал для красного вина", volume: "220 мл", ingredients: ["Ликер Aperol - 60 мл", "Содовая - 30 мл", "Игристое Абрау Дюрсо - 100 мл", "Апельсин - 30 гр"], method: "В бокал с кусковым льдом, перемешать, украсить слайсом апельсина." },
@@ -283,89 +282,61 @@
                 { category: "cocktail", name: "Негрони", glass: "Рокс", volume: "90 мл", ingredients: ["Джин Bikens - 30 мл", "Cinzano 1757 rosso - 30 мл", "Campari - 30 мл"], method: "Стир в смесительном бокале, перелить в рокс со льдом, цедра апельсина." },
                 { category: "cocktail", name: "Бэзил Смеш", glass: "Рокс", volume: "80 мл", ingredients: ["Джин - 40 мл", "Сахарный сироп - 20 мл", "Пф лимонный фреш - 20 мл", "Базилик свежий - 8 гр"], method: "Шейк с кусковым льдом, дабл стрейн в рокс, украсить базиликом." },
                 { category: "cocktail", name: "Татарский Олд Фэшн", glass: "Рокс", volume: "70 мл", ingredients: ["Пф Бурбон/Курага - 70 мл"], method: "Стир, перелить в рокс. Окуриваем бокал окуривателем и щепой." },
-                { category: "cocktail", name: "Лимончелло Спритц", glass: "Бокал для красного вина", volume: "180 мл", ingredients: ["Пф Лимончелло - 60 мл", "Игристое Абрау - 90 мл", "Вода с газом - 30 мл"], method: "В бокал со льдом, перемешать, мята и долька лимона." },
-                { category: "cocktail", name: "Мартини-Эспрессо", glass: "Креманка", volume: "115 мл", ingredients: ["Водка Белуга Нобл - 40 мл", "Эспрессо - 40 мл", "Мари Бризар Кофе - 25 мл", "Сахарный сироп - 10 мл"], method: "Шейк, подаем в креманку, украшаем кофейными зернами." },
-                { category: "cocktail", name: "Май-Тай", glass: "Рокс", volume: "140 мл", ingredients: ["Ром Барсело Бланко - 30 мл", "Ром Такамака - 30 мл", "Трипл Сек - 30 мл", "Амаретто - 10 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 30 мл"], method: "Шейк, в рокс с колотым льдом (фраппе), сушеный апельсин и пыль каркаде." },
-                { category: "cocktail", name: "Маргарита", glass: "Креманка", volume: "90 мл", ingredients: ["Текила Агавита - 40 мл", "Трипл Сек - 20 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 20 мл"], method: "Шейк, креманка с соленой каемкой, долька лайма." },
-                { category: "cocktail", name: "Сарти Шпритц", glass: "Бокал для красного вина", volume: "180 мл", ingredients: ["Абрау Дюрсо - 90 мл", "Ликер Сарти - 60 мл", "Вода с газом - 30 мл"], method: "В бокал со льдом, перемешать, слайс лайма." },
-                { category: "cocktail", name: "Венецианский Шпритц", glass: "Бокал для красного вина", volume: "190 мл", ingredients: ["Кампари - 60 мл", "Абрау Дюрсо - 70 мл", "Сок грейпфрута - 30 мл", "Вода с газом - 30 мл"], method: "В бокал со льдом, перемешать, слайс грейпфрута." },
-                { category: "cocktail", name: "Порн Стар Мартини", glass: "Креманка", volume: "160 + 50 мл", ingredients: ["Пф Маракуйя - 60 мл", "Водка ваниль - 50 мл", "Игристое брют - 50 мл (шот отдельно)"], method: "Шейк + драй шейк, в шале. Отдельно шот игристого." },
+                { category: "cocktail", name: "Лимончелло Спритц", glass: "Бокал", volume: "180 мл", ingredients: ["Пф Лимончелло - 60 мл", "Игристое Абрау - 90 мл", "Вода с газом - 30 мл"], method: "В бокал со льдом, перемешать, мята и долька лимона." },
+                { category: "cocktail", name: "Мартини-Эспрессо", glass: "Креманка", volume: "115 мл", ingredients: ["Водка Белуга - 40 мл", "Эспрессо - 40 мл", "Мари Бризар Кофе - 25 мл", "Сахарный сироп - 10 мл"], method: "Шейк, креманка, кофейные зерна." },
+                { category: "cocktail", name: "Май-Тай", glass: "Рокс", volume: "140 мл", ingredients: ["Ром Бланко - 30 мл", "Ром Такамака - 30 мл", "Трипл Сек - 30 мл", "Амаретто - 10 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 30 мл"], method: "Шейк, фраппе лед, сушеный апельсин." },
+                { category: "cocktail", name: "Порн Стар Мартини", glass: "Креманка", volume: "160+50", ingredients: ["Пф Маракуйя - 60 мл", "Водка ваниль - 50 мл", "Игристое брют - 50 мл (шот)"], method: "Шейк + драй шейк. Отдельно шот игристого." },
                 
-                { category: "lemonade", name: "Лимонад Малина с персиком", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Малина/Персик - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешать, украсить цветком." },
-                { category: "lemonade", name: "Лимонад Манго и маракуйя", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Тропики - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешать, украсить цветком." },
-                { category: "lemonade", name: "Лимонад Арбуз-Мята", glass: "Хайбол", volume: "150 мл", ingredients: ["Пф Арбуз-Мята - 100 мл", "Газированная вода - 50 мл"], method: "В хайбол со льдом, огурец и мята." },
+                { category: "lemonade", name: "Малина с персиком", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Малина/Персик - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешать." },
+                { category: "lemonade", name: "Манго и маракуйя", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Тропики - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешать." },
                 
-                { category: "smoothie", name: "Зеленый смузи", glass: "Хайбол", volume: "350 мл", ingredients: ["Огурец - 100 гр", "Яблоко - 100 гр", "Лимон - 40 гр", "Базилик - 5 гр", "Мята - 3 гр", "Сахарный сироп - 10 мл", "Вода - 50 мл"], method: "В блендер и перелить в хайбол." },
-                { category: "smoothie", name: "Смузи Цитрус-Имбирь", glass: "Хайбол", volume: "350 мл", ingredients: ["Апельсин - 120 гр", "Грейпфрут - 120 гр", "Лимон - 40 гр", "Имбирь - 15 гр", "Мед - 15 гр", "Лед - 50 гр"], method: "В блендер и перелить в хайбол." },
+                { category: "smoothie", name: "Зеленый смузи", glass: "Хайбол", volume: "350 мл", ingredients: ["Огурец - 100 гр", "Яблоко - 100 гр", "Лимон - 40 гр", "Базилик - 5 гр", "Мята - 3 гр", "Сироп - 10 мл", "Вода - 50 мл"], method: "В блендер." },
                 
-                { category: "nonalk", name: "Маргарита 0,0", glass: "Креманка", volume: "90 мл", ingredients: ["Дринксом текила - 40 мл", "Дринксом апельсин - 20 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 20 мл"], method: "Шейк, креманка с солью и лаймом." },
-                { category: "nonalk", name: "Апероль-Спритц 0,0", glass: "Бокал", volume: "220 мл", ingredients: ["Дринксом апельсин - 100 мл", "Вода с газом - 100 мл", "Сахарный сироп - 10 мл"], method: "В бокал со льдом, слайс апельсина." },
-                { category: "nonalk", name: "Виски-Кола 0,0", glass: "Рокс", volume: "-", ingredients: ["Дринксом виски - 40 мл", "Кока-Кола - 1 шт", "Лайм - 30 гр"], method: "Билд в роксе." },
-                { category: "nonalk", name: "Джин-Тоник 0,0", glass: "Рокс", volume: "-", ingredients: ["Дринксом Джин - 40 мл", "Тоник Гарденист - 1 шт", "Огурец - 50 гр", "Лимон - 25 гр"], method: "Билд в роксе." },
-                { category: "nonalk", name: "Мятный Шейк", glass: "Водник", volume: "300 мл", ingredients: ["Молоко 3,2% - 150 гр", "Мороженое - 150 гр", "Мята - 5 гр"], method: "Мадлим мяту в молоке, цедим, все в блендер." },
-                { category: "nonalk", name: "Кассэя", glass: "Креманка", volume: "90 мл", ingredients: ["Водка Lab Смородина - 40 мл", "Сахарный сироп - 20 мл", "Фреш лимона - 20 мл", "Базилик - 5 гр"], method: "Шейк, украшение: шоколадный велюр." }
+                { category: "nonalk", name: "Маргарита 0,0", glass: "Креманка", volume: "90 мл", ingredients: ["Дринксом текила - 40 мл", "Дринксом апельсин - 20 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 20 мл"], method: "Шейк, креманка с солью." },
+                { category: "nonalk", name: "Апероль-Спритц 0,0", glass: "Бокал", volume: "220 мл", ingredients: ["Дринксом апельсин - 100 мл", "Вода с газом - 100 мл", "Сахарный сироп - 10 мл"], method: "В бокал со льдом." }
             ],
             pf: [
                 { name: "Пф Микс кислот", baseVol: 1000, ingredients: ["Лимонная кислота - 16 гр", "Винная кислота - 8 гр", "Яблочная кислота - 12 гр", "Вода - 1000 мл"], method: "Смешиваем в мернике до растворения." },
                 { name: "Пф Сахарный сироп", baseVol: 1000, ingredients: ["Сахар - 900 гр", "Вода - 700 мл"], method: "Варим до растворения." },
                 { name: "Пф Алоэ", baseVol: 650, ingredients: ["Вода - 250 мл", "Напиток Алоэ - 250 мл", "Пф сахарный сироп - 100 мл", "Пф Микс кислот - 50 мл"], method: "Алоэ фильтруем, все смешиваем." },
-                { name: "Пф Клубника/цитрус", baseVol: 800, ingredients: ["Клубника с/м - 250 гр", "Джин Campobay - 400 мл", "Luxardo Aperitivo - 300 мл", "Сахар - 150 гр", "Лимонный фреш - 150 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
-                { name: "Пф Мэри", baseVol: 500, ingredients: ["Томаты в собств. соку - 300 гр", "Сок томатный - 150 мл", "Вяленые томаты - 30 гр", "Халапеньо - 12 гр", "Табаско - 5 гр", "Ворчестер - 35 гр", "Копченая паприка - 2 гр", "Пф сахарный сироп - 10 мл", "Пф микс кислот - 10 мл", "Апельсин фреш - 100 мл"], method: "Все кроме фреша в блендер, перебить. Добавить фреш." },
-                { name: "Пф Бурбон/Курага", baseVol: 450, ingredients: ["Бурбон Jim Beam - 500 мл", "Курага - 100 гр", "Пф кордиал мед - 100 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
-                { name: "Пф Грейпфрутовый кордиал", baseVol: 650, ingredients: ["Фреш грейпфрута - 300 мл", "Цедра грейпфрута - 18 гр", "Сахар - 130 гр", "Пф лаймовый фреш - 250 мл", "Вода - 100 мл", "Лимонная кислота - 9 гр"], method: "Цедра в сахаре 20 мин. Остальное смешать, нагреть до 60°C. Процедить." },
-                { name: "Пф Гибискус", baseVol: 400, ingredients: ["Вода - 400 мл", "Пф Сахарный сироп - 100 мл", "Чай каркаде - 20 гр", "Винная кислота - 6 гр"], method: "Выпариваем 100 мл, остужаем, цедим." },
-                { name: "Пф Беллини", baseVol: 1200, ingredients: ["Пюре персик - 500 гр", "Сок персиковый - 250 мл", "Сахар - 250 гр", "Вода - 250 мл", "Пф лимонный фреш - 300 мл"], method: "Заливаем в сотейник, варим, цедим." },
-                { name: "Пф Мятная вода", baseVol: 700, ingredients: ["Вода - 500 мл", "Мята - 50 гр", "Пф микс кислот - 100 мл", "Пф сахарный сироп - 300 мл", "Бентонит - 2 гр"], method: "Блендер. Добавляем бентонит. Ждем осветления в холоде. Сливаем чистое." },
-                { name: "Пф Фейхоа", baseVol: 550, ingredients: ["Пюре фейхоа - 200 гр", "Сок яблоко - 100 мл", "Пф лимонный фреш - 100 мл", "Сахар - 50 гр", "Вода - 150 мл"], method: "В сотейник, вывариваем, цедим." },
-                { name: "Пф Текила/клубника", baseVol: 250, ingredients: ["Клубника с/м - 100 гр", "Текила - 300 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
-                { name: "Пф Карамельная пена", baseVol: 300, ingredients: ["Сливки 11% - 300 мл", "Ксантан - 1 гр", "Карамельный сироп - 50 мл"], method: "Греем, мешаем венчиком, в кример." },
-                { name: "Пф Тархун", baseVol: 200, ingredients: ["Эстрагон свежий - 100 гр", "Пф сахарный сироп - 300 мл", "Яблочная кислота - 5 гр"], method: "Блендер, цедим, балансируем кислотой." },
-                { name: "Пф Лимончелло", baseVol: 800, ingredients: ["Водка Organic - 500 мл", "Цедра лимонов - 3 шт", "Лимонный фреш - 150 мл", "Пф сахарный сироп - 150 мл"], method: "Цедра в водке в су-вид 50°C 5 часов. Цедим, добавляем фреш и сироп." },
-                { name: "Пф Маракуйя", baseVol: 700, ingredients: ["Пюре маракуйя - 400 гр", "Пф Сахарный сироп - 150 мл", "Пф Лимонный фреш - 150 мл"], method: "Смешать." },
-                { name: "Пф Тропики", baseVol: 700, ingredients: ["Пюре манго - 300 гр", "Пюре маракуйя - 150 гр", "Пф сахарный сироп - 100 мл", "Микс кислот - 100 мл"], method: "Смешать." },
-                { name: "Пф Малина/Персик", baseVol: 630, ingredients: ["Пюре малина - 200 гр", "Пф беллини - 300 мл", "Пф сахарный сироп - 100 мл", "Микс кислот - 100 мл"], method: "Смешать." },
-                { name: "Пф Арбуз-Мята", baseVol: 400, ingredients: ["Арбуз - 420 гр", "Лимон - 150 гр", "Сахарный сироп - 60 мл", "Мята - 15 гр"], method: "Блендер, цедим." },
-		{ name: "Пф Черная смородина/джин", baseVol: 350, ingredients: ["Черная смородина с/м - 100 гр", "Джин Campobay - 250 мл", "Мята свежая - 2 гр", "Пф сахарный сироп - 100 мл", "Лимонный фреш - 50 мл"], method: "В вакуумный пакет, су-вид на 55°C 4 часа, фильтруем. Добавляем баланс (сироп и фреш)." },
-		{ name: "Пф Кир", baseVol: 450, ingredients: ["Водка Organic - 100 мл", "Bv Land cassis - 100 мл", "Bv Land Blackberry - 100 мл", "Пф Гибискус - 150 мл"], method: "Перемешиваем и переливаем в бутылку." },
-		{ name: "Пф Кордиал мед", baseVol: 400, ingredients: ["Мед цветочный - 100 гр", "Вода - 300 мл"], method: "Перемешиваем в сотейнике на низких температурах." },
-		{ name: "Пф Молочная кислота", baseVol: 1000, ingredients: ["Молочная кислота 80% - 50 мл", "Вода - 1000 мл"], method: "Смешиваем все в мернике." },
-		{ name: "Пф Брусника", baseVol: 850, ingredients: ["Пюре брусники - 500 гр", "Пф сахар (сироп) - 150 мл", "Вода - 200 мл"], method: "Смешать ингредиенты." }
+                { name: "Пф Клубника/цитрус", baseVol: 800, ingredients: ["Клубника с/м - 250 гр", "Джин - 400 мл", "Luxardo Aperitivo - 300 мл", "Сахар - 150 гр", "Лимонный фреш - 150 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
+                { name: "Пф Бурбон/Курага", baseVol: 450, ingredients: ["Бурбон - 500 мл", "Курага - 100 гр", "Пф кордиал мед - 100 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
+                { name: "Пф Беллини", baseVol: 1200, ingredients: ["Пюре персик - 500 гр", "Сок персиковый - 250 мл", "Сахар - 250 гр", "Вода - 250 мл", "Пф лимон - 300 мл"], method: "Варим, цедим." },
+                { name: "Пф Лимончелло", baseVol: 800, ingredients: ["Водка - 500 мл", "Цедра лимонов - 3 шт", "Лимонный фреш - 150 мл", "Сироп - 150 мл"], method: "Су-вид 50°C 5 часов. Цедим." }
             ]
         };
 
+        // --- ЛОГИКА ВКЛАДОК И ПОИСКА ---
         let currentCategory = 'drinks';
         let currentFilter = 'all';
-        const container = document.getElementById('cards-container');
+        
+        const cardsContainer = document.getElementById('cards-container');
+        const checklistContainer = document.getElementById('checklist-container');
         const searchInput = document.getElementById('search');
         const filtersDiv = document.getElementById('drink-filters');
 
-        // Парсер ингредиентов для калькулятора (вытаскивает число и текст)
         function parseIngredient(ingString) {
             const match = ingString.match(/(.+) - ([\d.,]+)\s*(.+)?/);
-            if (match) {
-                return { name: match[1], amount: parseFloat(match[2].replace(',', '.')), unit: match[3] || '' };
-            }
-            return { raw: ingString }; // Если нет числа
+            if (match) return { name: match[1], amount: parseFloat(match[2].replace(',', '.')), unit: match[3] || '' };
+            return { raw: ingString };
         }
 
         function renderCards() {
-            container.innerHTML = '';
+            cardsContainer.innerHTML = '';
             const query = searchInput.value.toLowerCase();
             let items = data[currentCategory];
             
-            // Фильтрация по категории напитков
             if (currentCategory === 'drinks' && currentFilter !== 'all') {
                 items = items.filter(item => item.category === currentFilter);
             }
 
-            // Фильтрация по поиску
             const filteredItems = items.filter(item => {
                 const textToSearch = (item.name + " " + item.ingredients.join(" ") + " " + item.method).toLowerCase();
                 return textToSearch.includes(query);
             });
 
             if(filteredItems.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-sec); text-align:center; width:100%; margin-top: 40px;">Ничего не найдено</p>';
+                cardsContainer.innerHTML = '<p style="color:var(--text-sec); text-align:center; width:100%; margin-top: 40px;">Ничего не найдено</p>';
                 return;
             }
 
@@ -378,7 +349,6 @@
                 if (item.volume && item.volume !== "-") tagsHtml += `<span class="tag">💧 ${item.volume}</span>`;
                 tagsHtml += '</div>';
 
-                // Логика калькулятора только для ПФ с базовым объемом
                 let calcHtml = '';
                 let ingListHtml = '';
                 const hasCalc = currentCategory === 'pf' && item.baseVol;
@@ -391,7 +361,6 @@
                             <span class="calc-unit">мл</span>
                         </div>
                     `;
-                    
                     ingListHtml = item.ingredients.map((ing, i) => {
                         const parsed = parseIngredient(ing);
                         if (parsed.raw) return `<li>${parsed.raw}</li>`;
@@ -418,31 +387,20 @@
                     </div>
                 `;
 
-                // Открытие карточки
-                card.querySelector('.card-header').addEventListener('click', () => {
-                    card.classList.toggle('open');
-                });
-
-                container.appendChild(card);
+                card.querySelector('.card-header').addEventListener('click', () => card.classList.toggle('open'));
+                cardsContainer.appendChild(card);
             });
         }
 
-        // Функция пересчета калькулятора
         window.updateMath = function(cardIndex) {
             const input = document.getElementById(`calc-${cardIndex}`);
             const baseVol = parseFloat(input.getAttribute('data-base'));
             const targetVol = parseFloat(input.value) || 0;
             const ratio = targetVol / baseVol;
 
-            // Находим все ингредиенты в этой карточке
-            const item = data.pf.find(p => p.baseVol == baseVol); // грубый поиск, но для уникальных объемов работает
-            
-            // Находим спаны и обновляем числа
-            const spans = document.querySelectorAll(`[id^="ing-${cardIndex}-"]`);
-            spans.forEach(span => {
+            document.querySelectorAll(`[id^="ing-${cardIndex}-"]`).forEach(span => {
                 const baseAmount = parseFloat(span.getAttribute('data-base'));
                 let newAmount = baseAmount * ratio;
-                // Округляем красиво (без лишних нулей)
                 span.innerText = Number.isInteger(newAmount) ? newAmount : newAmount.toFixed(1);
             });
         };
@@ -452,10 +410,22 @@
             
             document.getElementById('btn-drinks').classList.toggle('active', category === 'drinks');
             document.getElementById('btn-pf').classList.toggle('active', category === 'pf');
+            document.getElementById('btn-checklist').classList.toggle('active', category === 'checklist');
             
-            filtersDiv.style.display = category === 'drinks' ? 'flex' : 'none';
-            searchInput.value = ""; 
-            renderCards();
+            if (category === 'checklist') {
+                cardsContainer.style.display = 'none';
+                filtersDiv.style.display = 'none';
+                searchInput.style.display = 'none';
+                checklistContainer.style.display = 'flex';
+                renderChecklist();
+            } else {
+                cardsContainer.style.display = 'grid';
+                checklistContainer.style.display = 'none';
+                searchInput.style.display = 'block';
+                filtersDiv.style.display = category === 'drinks' ? 'flex' : 'none';
+                searchInput.value = ""; 
+                renderCards();
+            }
         }
 
         function setFilter(filter, el) {
@@ -465,9 +435,125 @@
             renderCards();
         }
 
-        function filterCards() {
-            renderCards();
+        function filterCards() { renderCards(); }
+
+        // --- ЛОГИКА ЧЕК-ЛИСТА (ХРАНЕНИЕ В ТЕЛЕФОНЕ) ---
+        let tasks = JSON.parse(localStorage.getItem('bartender_checklist')) || [];
+
+        function saveTasks() {
+            localStorage.setItem('bartender_checklist', JSON.stringify(tasks));
         }
+
+        function renderChecklist() {
+            const listEl = document.getElementById('task-list');
+            listEl.innerHTML = '';
+            
+            if(tasks.length === 0) {
+                listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center;">Задач пока нет. Добавь первую!</p>';
+                return;
+            }
+
+            tasks.forEach(task => {
+                const item = document.createElement('div');
+                item.className = `cl-item ${task.done ? 'done' : ''}`;
+                item.innerHTML = `
+                    <div class="cl-checkbox" onclick="toggleTask(${task.id})"></div>
+                    <div class="cl-text" onclick="toggleTask(${task.id})">${task.text}</div>
+                    <button class="cl-delete" onclick="deleteTask(${task.id})">✕</button>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        function addTask() {
+            const input = document.getElementById('new-task');
+            const text = input.value.trim();
+            if(text) {
+                tasks.push({ id: Date.now(), text: text, done: false });
+                input.value = '';
+                saveTasks();
+                renderChecklist();
+            }
+        }
+
+        function handleTaskEnter(e) {
+            if (e.key === 'Enter') addTask();
+        }
+
+        window.toggleTask = function(id) {
+            const task = tasks.find(t => t.id === id);
+            if(task) {
+                task.done = !task.done;
+                saveTasks();
+                renderChecklist();
+            }
+        }
+
+        window.deleteTask = function(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderChecklist();
+        }
+
+        // --- МАГИЯ PWA (УСТАНОВКА НА ЭКРАН) ---
+        // 1. Создаем фальшивый Service Worker и Manifest на лету, чтобы браузер понял, что это "Приложение"
+        
+        // Базовая иконка (SVG)
+        const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000"/><text y="50%" x="50%" dominant-baseline="middle" text-anchor="middle" font-size="50">🍸</text></svg>`;
+        const encodedIcon = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgIcon)));
+
+        const manifest = {
+            "name": "Тугай ТТК",
+            "short_name": "ТТК Бар",
+            "display": "standalone",
+            "background_color": "#000000",
+            "theme_color": "#000000",
+            "start_url": window.location.href,
+            "icons": [{"src": encodedIcon, "sizes": "512x512", "type": "image/svg+xml"}]
+        };
+
+        // Внедряем манифест
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        const manifestUrl = URL.createObjectURL(manifestBlob);
+        document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${manifestUrl}">`);
+
+        // Внедряем пустой Service Worker (требование для установки)
+        const swCode = `self.addEventListener('fetch', function(e) {});`;
+        const swBlob = new Blob([swCode], {type: 'application/javascript'});
+        const swUrl = URL.createObjectURL(swBlob);
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(swUrl).catch(err => console.log('SW setup failed', err));
+        }
+
+        // 2. Логика кнопки "Установить на экран"
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Предотвращаем автоматический показ (особенно на Android)
+            e.preventDefault();
+            // Сохраняем событие, чтобы вызвать его по кнопке
+            deferredPrompt = e;
+            // Показываем кнопку
+            installBtn.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Показываем системное окно установки
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.style.display = 'none'; // Прячем кнопку если установили
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // На iOS (Safari) событие beforeinstallprompt не работает. 
+        // Если хочешь, можно добавить всплывашку "Нажмите Поделиться -> На экран домой" специально для айфонов, 
+        // но пока приложение будет работать в браузере как часы.
 
         // Запуск
         renderCards();
