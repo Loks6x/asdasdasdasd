@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Мета-теги для iOS (Apple) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Тугай ТТК">
@@ -14,11 +13,11 @@
             --bg-base: #000000;
             --bg-card: rgba(28, 28, 30, 0.6);
             --bg-search: #1C1C1E;
-            --accent: #0A84FF; /* Apple Blue */
-            --accent-pf: #30D158; /* Apple Green */
-            --accent-danger: #FF453A; /* Apple Red */
+            --accent: #0A84FF;
+            --accent-pf: #30D158;
+            --accent-danger: #FF453A;
             --text-main: #FFFFFF;
-            --text-sec: #EBEBF599; /* Muted Apple text */
+            --text-sec: #EBEBF599;
             --border-color: rgba(255, 255, 255, 0.1);
             --glass-blur: blur(20px);
         }
@@ -36,145 +35,58 @@
             align-items: center;
         }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin: 10px 0 25px;
-            text-align: center;
-        }
+        h1 { font-size: 28px; font-weight: 700; letter-spacing: 0.5px; margin: 10px 0 25px; text-align: center; }
 
-        /* Controls: Tabs & Search */
         .controls {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: var(--glass-blur);
-            padding: 10px 0 15px;
+            width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 16px;
+            margin-bottom: 24px; position: sticky; top: 0; z-index: 100;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: var(--glass-blur); padding: 10px 0 15px;
         }
 
-        .segment-control {
-            display: flex;
-            background: var(--bg-search);
-            border-radius: 12px;
-            padding: 4px;
-        }
-
+        .segment-control { display: flex; background: var(--bg-search); border-radius: 12px; padding: 4px; }
         .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-sec);
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+            flex: 1; background: transparent; border: none; color: var(--text-sec); padding: 10px;
+            border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;
         }
-
-        .tab-btn.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: var(--text-main);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
+        .tab-btn.active { background: rgba(255, 255, 255, 0.15); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
         .search-bar {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-search);
-            color: white;
-            font-size: 16px;
-            outline: none;
-            transition: border 0.2s;
+            width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--bg-search); color: white; font-size: 16px; outline: none; transition: border 0.2s;
         }
-
         .search-bar:focus { border-color: var(--accent); }
 
-        /* Filters (Pills) */
-        .filters {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-        }
+        .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
         .filters::-webkit-scrollbar { display: none; }
-
         .filter-pill {
-            background: var(--bg-search);
-            border: 1px solid var(--border-color);
-            color: var(--text-sec);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: 0.2s;
+            background: var(--bg-search); border: 1px solid var(--border-color); color: var(--text-sec);
+            padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: 0.2s;
         }
+        .filter-pill.active { background: var(--text-main); color: var(--bg-base); border-color: var(--text-main); }
 
-        .filter-pill.active {
-            background: var(--text-main);
-            color: var(--bg-base);
-            border-color: var(--text-main);
-        }
+        .content-container { width: 100%; max-width: 1000px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; width: 100%; }
 
-        /* Container for Cards & Checklist */
-        .content-container {
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        /* Cards Layout */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 16px;
-            width: 100%;
-        }
-
-        /* Card Apple Style */
         .card {
-            background: var(--bg-card);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
+            background: var(--bg-card); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 20px; cursor: pointer; transition: background 0.3s, transform 0.2s;
         }
-
         .card:active { transform: scale(0.98); }
-
         .card-header { display: flex; justify-content: space-between; align-items: center; }
-        .card-title { font-size: 19px; font-weight: 600; margin: 0; color: var(--text-main); }
+        .card-title { font-size: 19px; font-weight: 600; margin: 0; color: var(--text-main); line-height: 1.2; }
         .chevron { color: var(--text-sec); transition: transform 0.3s ease; font-size: 14px; }
         .card.open .chevron { transform: rotate(180deg); }
-
         .card-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out; }
         .card-content-inner { overflow: hidden; }
         .card.open .card-content { grid-template-rows: 1fr; margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px; }
 
         .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
         .tag { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--text-sec); }
-
         .section-title { color: var(--text-sec); font-size: 13px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px; }
         .method { font-size: 15px; line-height: 1.5; color: var(--text-main); margin-bottom: 10px; }
         ul { margin: 0 0 16px 0; padding-left: 20px; color: var(--text-main); font-size: 15px; line-height: 1.6;}
         li { margin-bottom: 4px; }
 
-        /* Calculator Styles */
         .calc-row {
             display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
             background: rgba(48, 209, 88, 0.1); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(48, 209, 88, 0.3);
@@ -187,44 +99,21 @@
         .calc-input:focus { border-color: var(--accent-pf); }
         .pf-ing-amount { font-weight: 700; color: var(--accent-pf); transition: color 0.2s;}
 
-        /* Checklist Styles */
         #checklist-container { display: none; width: 100%; flex-direction: column; gap: 16px; }
         .cl-input-group { display: flex; gap: 10px; }
-        .cl-input {
-            flex: 1; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border-color);
-            background: var(--bg-search); color: white; font-size: 16px; outline: none;
-        }
+        .cl-input { flex: 1; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-search); color: white; font-size: 16px; outline: none; }
         .cl-input:focus { border-color: var(--accent); }
-        .cl-btn {
-            background: var(--accent); color: white; border: none; padding: 0 20px; border-radius: 12px;
-            font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.2s;
-        }
-        .cl-btn:active { transform: scale(0.95); opacity: 0.8; }
-        
+        .cl-btn { background: var(--accent); color: white; border: none; padding: 0 20px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
         .cl-list { display: flex; flex-direction: column; gap: 10px; }
-        .cl-item {
-            background: var(--bg-card); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
-            transition: 0.2s;
-        }
+        .cl-item { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .cl-item.done { opacity: 0.6; }
         .cl-item.done .cl-text { text-decoration: line-through; color: var(--text-sec); }
-        
-        .cl-checkbox {
-            width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text-sec);
-            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; flex-shrink: 0;
-        }
+        .cl-checkbox { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text-sec); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
         .cl-item.done .cl-checkbox { background: var(--accent); border-color: var(--accent); }
         .cl-item.done .cl-checkbox::after { content: "✓"; color: white; font-size: 14px; font-weight: bold; }
-        
-        .cl-text { flex: 1; font-size: 16px; color: var(--text-main); word-break: break-word; transition: 0.2s; cursor: pointer; }
-        
-        .cl-delete {
-            background: rgba(255, 69, 58, 0.15); color: var(--accent-danger); border: none; width: 32px; height: 32px;
-            border-radius: 8px; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer;
-        }
+        .cl-text { flex: 1; font-size: 16px; word-break: break-word; cursor: pointer; }
+        .cl-delete { background: rgba(255, 69, 58, 0.15); color: var(--accent-danger); border: none; width: 32px; height: 32px; border-radius: 8px; font-size: 18px; cursor: pointer; }
 
-        /* PWA Install Button */
         #install-btn {
             display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: white; color: black; border: none; padding: 12px 24px; border-radius: 20px;
@@ -234,7 +123,7 @@
 </head>
 <body>
 
-    <h1>Сиськи ахуенная тема ваще</h1>
+    <h1>Тугай ТТК</h1>
     
     <div class="controls">
         <div class="segment-control">
@@ -251,65 +140,105 @@
             <div class="filter-pill" onclick="setFilter('lemonade', this)">Лимонады</div>
             <div class="filter-pill" onclick="setFilter('smoothie', this)">Смузи</div>
             <div class="filter-pill" onclick="setFilter('nonalk', this)">Б/А</div>
+            <div class="filter-pill" onclick="setFilter('tea_coffee', this)">Чай / Кофе</div>
         </div>
     </div>
 
     <div class="content-container">
-        <!-- Сетка с карточками меню -->
         <div class="grid" id="cards-container"></div>
 
-        <!-- Чек-лист (Скрыт по умолчанию) -->
         <div id="checklist-container">
             <div class="cl-input-group">
-                <input type="text" id="new-task" class="cl-input" placeholder="Добавить задачу (напр. сварить сироп)..." onkeypress="handleTaskEnter(event)">
+                <input type="text" id="new-task" class="cl-input" placeholder="Добавить задачу..." onkeypress="handleTaskEnter(event)">
                 <button class="cl-btn" onclick="addTask()">Плюс</button>
             </div>
-            <div class="cl-list" id="task-list">
-                <!-- Задачи будут тут -->
-            </div>
+            <div class="cl-list" id="task-list"></div>
         </div>
     </div>
 
-    <!-- Кнопка установки приложения -->
     <button id="install-btn">Установить приложение</button>
 
     <script>
-        // --- БАЗА ДАННЫХ ---
+        // --- ПОЛНАЯ БАЗА ДАННЫХ СО ВСЕХ СКРИНШОТОВ ---
         const data = {
             drinks: [
-                { category: "cocktail", name: "Апероль Спритц", glass: "Бокал для красного вина", volume: "220 мл", ingredients: ["Ликер Aperol - 60 мл", "Содовая - 30 мл", "Игристое Абрау Дюрсо - 100 мл", "Апельсин - 30 гр"], method: "В бокал с кусковым льдом, перемешать, украсить слайсом апельсина." },
-                { category: "cocktail", name: "Беллини", glass: "Шале / Креманка", volume: "200 мл", ingredients: ["Пф Беллини - 80 мл", "Игристое Шато Двуморье - 120 мл"], method: "В блендер, немного взбить, перелить в шале. Украсить цветком." },
-                { category: "cocktail", name: "Негрони", glass: "Рокс", volume: "90 мл", ingredients: ["Джин Bikens - 30 мл", "Cinzano 1757 rosso - 30 мл", "Campari - 30 мл"], method: "Стир в смесительном бокале, перелить в рокс со льдом, цедра апельсина." },
-                { category: "cocktail", name: "Бэзил Смеш", glass: "Рокс", volume: "80 мл", ingredients: ["Джин - 40 мл", "Сахарный сироп - 20 мл", "Пф лимонный фреш - 20 мл", "Базилик свежий - 8 гр"], method: "Шейк с кусковым льдом, дабл стрейн в рокс, украсить базиликом." },
+                // Коктейли
+                { category: "cocktail", name: "Апероль Спритц", glass: "Бокал для красного вина", volume: "220 мл", ingredients: ["Ликер Aperol - 60 мл", "Содовая - 30 мл", "Игристое Абрау Дюрсо - 100 мл", "Апельсин - 30 гр"], method: "В бокал для красного вина с кусковым льдом, перемешать, украсить слайсом апельсина." },
+                { category: "cocktail", name: "Беллини", glass: "Креманка", volume: "200 мл", ingredients: ["Пф Беллини - 80 мл", "Игристое Шато Двуморье - 120 мл"], method: "В блендер, немного взбить, перелить в шале. Украсить цветком." },
+                { category: "cocktail", name: "Негрони", glass: "Рокс", volume: "90 мл", ingredients: ["Джин Bikens - 30 мл", "Cinzano 1757 rosso - 30 мл", "Campari - 30 мл"], method: "Стир в смесительном бокале, перелить в рокс со льдом, украшаем цедрой апельсина." },
+                { category: "cocktail", name: "Бэзил Смеш", glass: "Рокс", volume: "80 мл", ingredients: ["Джин - 40 мл", "Сахарный сироп - 20 мл", "Пф лимонный фреш - 20 мл", "Базилик свежий - 8 гр"], method: "Шейк с кусковым льдом, подаем в рокс со льдом, украсить листом базилика." },
                 { category: "cocktail", name: "Татарский Олд Фэшн", glass: "Рокс", volume: "70 мл", ingredients: ["Пф Бурбон/Курага - 70 мл"], method: "Стир, перелить в рокс. Окуриваем бокал окуривателем и щепой." },
-                { category: "cocktail", name: "Лимончелло Спритц", glass: "Бокал", volume: "180 мл", ingredients: ["Пф Лимончелло - 60 мл", "Игристое Абрау - 90 мл", "Вода с газом - 30 мл"], method: "В бокал со льдом, перемешать, мята и долька лимона." },
-                { category: "cocktail", name: "Мартини-Эспрессо", glass: "Креманка", volume: "115 мл", ingredients: ["Водка Белуга - 40 мл", "Эспрессо - 40 мл", "Мари Бризар Кофе - 25 мл", "Сахарный сироп - 10 мл"], method: "Шейк, креманка, кофейные зерна." },
-                { category: "cocktail", name: "Май-Тай", glass: "Рокс", volume: "140 мл", ingredients: ["Ром Бланко - 30 мл", "Ром Такамака - 30 мл", "Трипл Сек - 30 мл", "Амаретто - 10 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 30 мл"], method: "Шейк, фраппе лед, сушеный апельсин." },
-                { category: "cocktail", name: "Порн Стар Мартини", glass: "Креманка", volume: "160+50", ingredients: ["Пф Маракуйя - 60 мл", "Водка ваниль - 50 мл", "Игристое брют - 50 мл (шот)"], method: "Шейк + драй шейк. Отдельно шот игристого." },
+                { category: "cocktail", name: "Лимончелло Спритц", glass: "Бокал для красного вина", volume: "180 мл", ingredients: ["Пф Лимончелло - 60 мл", "Игристое Абрау - 90 мл", "Вода с газом - 30 мл"], method: "В бокал со льдом, перемешать, украшаем листьями мяты и долькой лимона." },
+                { category: "cocktail", name: "Мартини-Эспрессо", glass: "Креманка", volume: "115 мл", ingredients: ["Водка Белуга Нобл - 40 мл", "Эспрессо - 40 мл", "Мари Бризар Кофе - 25 мл", "Сахарный сироп - 10 мл"], method: "Шейк с кусковым льдом, подаем в креманку, украшаем зерновым кофе." },
+                { category: "cocktail", name: "Май-Тай", glass: "Рокс", volume: "140 мл", ingredients: ["Ром Барсело Бланко - 30 мл", "Ром Такамака - 30 мл", "Трипл Сек - 30 мл", "Амаретто - 10 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 30 мл"], method: "Шейк, подаем в рокс с колотым льдом (фраппе), украшаем сушеным апельсином и пыль из каркаде." },
+                { category: "cocktail", name: "Маргарита", glass: "Креманка", volume: "90 мл", ingredients: ["Текила Агавита - 40 мл", "Трипл Сек - 20 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 20 мл"], method: "Шейк, подаем в креманку с каемкой из соли и долькой лайма." },
+                { category: "cocktail", name: "Сарти Шпритц", glass: "Бокал для красного вина", volume: "180 мл", ingredients: ["Абрау Дюрсо - 90 мл", "Ликер Сарти - 60 мл", "Газированная вода - 30 мл"], method: "В бокал со льдом, перемешать, слайс лайма." },
+                { category: "cocktail", name: "Венецианский Шпритц", glass: "Бокал для красного вина", volume: "190 мл", ingredients: ["Кампари - 60 мл", "Абрау Дюрсо - 70 мл", "Сок грейпфрута - 30 мл", "Газированная вода - 30 мл"], method: "В бокал со льдом, перемешать, слайс грейпфрута." },
+                { category: "cocktail", name: "Порн Стар Мартини", glass: "Креманка", volume: "160 + 50 мл", ingredients: ["Пф Маракуйя - 60 мл", "Водка Lab ваниль и бобы тонка - 50 мл", "Игристое Шато Двуморье - 50 мл (шот)"], method: "Шейк + драй шейк, переливаем в шале, шот игристого отдельно." },
                 
-                { category: "lemonade", name: "Малина с персиком", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Малина/Персик - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешать." },
-                { category: "lemonade", name: "Манго и маракуйя", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Тропики - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешать." },
+                // Лимонады
+                { category: "lemonade", name: "Малина с персиком", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Малина/Персик - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешиваем, украшаем цветком." },
+                { category: "lemonade", name: "Манго и маракуйя", glass: "Хайбол", volume: "160 мл", ingredients: ["Пф Тропики - 70 мл", "Содовая - 90 мл"], method: "В хайбол со льдом, перемешиваем, украшаем цветком." },
+                { category: "lemonade", name: "Лимонад Арбуз-Мята", glass: "Хайбол", volume: "150 мл", ingredients: ["Пф Арбуз-Мята - 100 мл", "Газированная вода - 50 мл"], method: "Наливаем в хайбол, украшаем огурцом и мятой." },
                 
-                { category: "smoothie", name: "Зеленый смузи", glass: "Хайбол", volume: "350 мл", ingredients: ["Огурец - 100 гр", "Яблоко - 100 гр", "Лимон - 40 гр", "Базилик - 5 гр", "Мята - 3 гр", "Сироп - 10 мл", "Вода - 50 мл"], method: "В блендер." },
+                // Смузи
+                { category: "smoothie", name: "Зеленый смузи", glass: "Хайбол", volume: "350 мл", ingredients: ["Огурец - 100 гр", "Яблоко - 100 гр", "Лимон - 40 гр", "Базилик - 5 гр", "Мята - 3 гр", "Сахарный сироп - 10 мл", "Вода - 50 мл"], method: "Закидываем в блендер, переливаем в хайбол." },
+                { category: "smoothie", name: "Цитрус-Имбирь", glass: "Хайбол", volume: "350 мл", ingredients: ["Апельсин - 120 гр", "Грейпфрут - 120 гр", "Лимон - 40 гр", "Имбирь - 15 гр", "Мед - 15 гр", "Лед - 50 гр"], method: "Закидываем в блендер, переливаем в хайбол." },
                 
-                { category: "nonalk", name: "Маргарита 0,0", glass: "Креманка", volume: "90 мл", ingredients: ["Дринксом текила - 40 мл", "Дринксом апельсин - 20 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 20 мл"], method: "Шейк, креманка с солью." },
-                { category: "nonalk", name: "Апероль-Спритц 0,0", glass: "Бокал", volume: "220 мл", ingredients: ["Дринксом апельсин - 100 мл", "Вода с газом - 100 мл", "Сахарный сироп - 10 мл"], method: "В бокал со льдом." }
+                // Чай / Кофе / Горячее
+                { category: "tea_coffee", name: "Чай Смородина с базиликом", glass: "Чайник", volume: "700 мл", ingredients: ["Пюре смородины - 120 гр", "Базилик свежий - 10 гр", "Пф сахарный сироп - 60 мл", "Эрл грей - 5 гр"], method: "Закидываем все в чайник и кипятим." },
+                { category: "tea_coffee", name: "Чай Облепиховый", glass: "Чайник", volume: "700 мл", ingredients: ["Пюре облепиха - 120 гр", "Пф сахарный сироп - 80 мл", "Имбирь корень - 14 гр", "Чай сенча - 5 гр", "Лимон - 40 гр"], method: "Закидываем все в чайник и кипятим." },
+                { category: "tea_coffee", name: "Чай с травами", glass: "Чайник", volume: "700 мл", ingredients: ["Чабрец свежий - 6 гр", "Розмарин - 6 гр", "Душица сушеная - 10 гр", "Мята - 14 гр", "Мед - 50 гр", "Эрл грей - 5 гр", "Курага - 50 гр (отдельно)", "Чернослив - 50 гр (отдельно)", "Варенье из шишек - 50 гр (отдельно)"], method: "Травы и мед в чайник. Отдельно в соусниках подаем курагу, чернослив и варенье." },
+                { category: "tea_coffee", name: "Морс", glass: "Хайбол", volume: "250 мл", ingredients: ["Основа для морса - 40 гр", "Вода - 210 мл"], method: "Смешиваем в хайболе." },
+                { category: "tea_coffee", name: "Какао", glass: "Чашка", volume: "250 мл", ingredients: ["Горячий шоколад - 80 мл", "Молоко - 200 мл"], method: "Смешиваем в питчере и взбиваем стимером." },
+                { category: "tea_coffee", name: "Горячий шоколад", glass: "Чашка", volume: "80 мл", ingredients: ["Шоколад - 20 гр", "Сливки 10% - 60 мл"], method: "Топим шоколад на водяной бане, смешиваем с горячими сливками." },
+                { category: "tea_coffee", name: "Эспрессо / Допио", glass: "Чашка", volume: "40 / 80 мл", ingredients: ["Кофе - 18 гр (36 гр для Допио)"], method: "Классическая экстракция." },
+                { category: "tea_coffee", name: "Американо / Капучино", glass: "Чашка", volume: "200 / 250 мл", ingredients: ["Кофе - 18 гр", "Молоко (для капучино) - 200 мл"], method: "Готовим на 1/2 порции кофе." },
+                { category: "tea_coffee", name: "Флэт Уайт / Латте", glass: "Чашка", volume: "250 мл", ingredients: ["Кофе - 18 гр", "Молоко - 200 мл"], method: "Флэт - целая порция кофе, Латте - 1/2 кофе." },
+                { category: "tea_coffee", name: "Раф кофе", glass: "Чашка", volume: "250 мл", ingredients: ["Кофе - 18 гр", "Молоко - 100 мл", "Сливки - 100 мл", "Ванильный сахар - 1 гр"], method: "Готовим на 1/2 кофе." },
+
+                // Безалкогольные
+                { category: "nonalk", name: "Маргарита 0,0", glass: "Креманка", volume: "90 мл", ingredients: ["Дринксом текила - 40 мл", "Дринксом апельсин - 20 мл", "Сахарный сироп - 10 мл", "Фреш лайма - 20 мл"], method: "Шейк, подаем в креманку с каемкой из соли." },
+                { category: "nonalk", name: "Апероль-Спритц 0,0", glass: "Бокал для красного вина", volume: "220 мл", ingredients: ["Дринксом апельсин - 100 мл", "Вода с газом - 100 мл", "Сахарный сироп - 10 мл"], method: "В бокал со льдом, слайс апельсина." },
+                { category: "nonalk", name: "Виски-Кола 0,0", glass: "Рокс", volume: "200 мл", ingredients: ["Дринксом виски - 40 мл", "Кока-Кола - 1 шт", "Лайм - 30 гр"], method: "Наливаем все в рокс, смешиваем, украшаем лаймом." },
+                { category: "nonalk", name: "Джин-Тоник 0,0", glass: "Рокс", volume: "200 мл", ingredients: ["Дринксом Джин - 40 мл", "Тоник Гарденист - 1 шт", "Огурец - 50 гр", "Лимон - 25 гр"], method: "Наливаем в рокс, смешиваем, украшаем лимоном и огурцом." },
+                { category: "nonalk", name: "Мятный Шейк", glass: "Водник", volume: "300 мл", ingredients: ["Молоко 3,2% - 150 гр", "Мороженое - 150 гр", "Мята - 5 гр"], method: "Мадлим мяту с молоком, фильтруем через сито, все в блендер." },
+                { category: "nonalk", name: "Кассэя", glass: "Креманка", volume: "90 мл", ingredients: ["Водка Lab Смородина 0,0 - 40 мл", "Сахарный сироп - 20 мл", "Фреш лимона - 20 мл", "Базилик - 5 гр"], method: "Шейк, креманка, украшение шоколадный велюр." }
             ],
             pf: [
-                { name: "Пф Микс кислот", baseVol: 1000, ingredients: ["Лимонная кислота - 16 гр", "Винная кислота - 8 гр", "Яблочная кислота - 12 гр", "Вода - 1000 мл"], method: "Смешиваем в мернике до растворения." },
-                { name: "Пф Сахарный сироп", baseVol: 1000, ingredients: ["Сахар - 900 гр", "Вода - 700 мл"], method: "Варим до растворения." },
-                { name: "Пф Алоэ", baseVol: 650, ingredients: ["Вода - 250 мл", "Напиток Алоэ - 250 мл", "Пф сахарный сироп - 100 мл", "Пф Микс кислот - 50 мл"], method: "Алоэ фильтруем, все смешиваем." },
-                { name: "Пф Клубника/цитрус", baseVol: 800, ingredients: ["Клубника с/м - 250 гр", "Джин - 400 мл", "Luxardo Aperitivo - 300 мл", "Сахар - 150 гр", "Лимонный фреш - 150 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
-                { name: "Пф Бурбон/Курага", baseVol: 450, ingredients: ["Бурбон - 500 мл", "Курага - 100 гр", "Пф кордиал мед - 100 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
-                { name: "Пф Беллини", baseVol: 1200, ingredients: ["Пюре персик - 500 гр", "Сок персиковый - 250 мл", "Сахар - 250 гр", "Вода - 250 мл", "Пф лимон - 300 мл"], method: "Варим, цедим." },
-                { name: "Пф Лимончелло", baseVol: 800, ingredients: ["Водка - 500 мл", "Цедра лимонов - 3 шт", "Лимонный фреш - 150 мл", "Сироп - 150 мл"], method: "Су-вид 50°C 5 часов. Цедим." }
+                { name: "Пф Микс кислот", baseVol: 1000, ingredients: ["Лимонная кислота - 16 гр", "Винная кислота - 8 гр", "Яблочная кислота - 12 гр", "Вода - 1000 мл"], method: "Смешиваем в мернике и переливаем в бутылку." },
+                { name: "Пф Сахарный сироп", baseVol: 1000, ingredients: ["Сахар - 900 гр", "Вода - 700 мл"], method: "Все засыпаем в сотейник, варим до растворения, переливаем." },
+                { name: "Пф Алоэ", baseVol: 650, ingredients: ["Вода - 250 мл", "Напиток Алоэ - 250 мл", "Пф сахарный сироп - 100 мл", "Пф Микс кислот - 50 мл"], method: "Алоэ воду фильтруем через сито, добавляем все ингредиенты и смешиваем." },
+                { name: "Пф Клубника/цитрус", baseVol: 800, ingredients: ["Клубника с/м - 250 гр", "Джин Campobay - 400 мл", "Luxardo Aperitivo - 300 мл", "Сахар - 150 гр", "Лимонный фреш - 150 мл"], method: "Все в вакуумный пакет и су-вид на 55 градусах 4 часа." },
+                { name: "Пф Мэри", baseVol: 500, ingredients: ["Томаты в собств. соку - 300 гр", "Сок томатный - 150 мл", "Вяленые томаты - 30 гр", "Халапеньо - 12 гр", "Табаско - 5 гр", "Апельсины - 250 гр (или фреш 150 мл)", "Ворчестер - 35 гр", "Копченая паприка - 2 гр", "Пф сахарный сироп - 10 мл", "Пф микс кислот - 10 мл"], method: "Все в блендер (кроме фреша апельсина), перебить. Добавить фреш апельсина (100 мл)." },
+                { name: "Пф Черная смородина/джин", baseVol: 350, ingredients: ["Черная смородина с/м - 100 гр", "Джин Campobay - 250 мл", "Мята свежая - 2 гр", "Пф сахарный сироп - 100 мл", "Лимонный фреш - 50 мл"], method: "Су-вид на 55°C 4 часа, фильтруем. Добавляем баланс (сироп и фреш)." },
+                { name: "Пф Бурбон/Курага", baseVol: 450, ingredients: ["Бурбон Jim Beam - 500 мл", "Курага - 100 гр", "Пф кордиал мед - 100 мл"], method: "Засыпаем в пакет и су-вид 4 часа на 55°C." },
+                { name: "Пф Грейпфрутовый кордиал", baseVol: 650, ingredients: ["Грейпфрут - 800 гр (300 мл фреш)", "Сахар - 130 гр", "Пф лаймовый фреш - 250 мл", "Вода - 100 мл", "Цедра грейпфрута - 18 гр", "Лимонная кислота - 9 гр"], method: "Цедра с сахаром на 20 мин. Остальное смешать, нагреть до 60°C. Отжать цедру, профильтровать." },
+                { name: "Пф Гибискус", baseVol: 400, ingredients: ["Вода - 400 мл", "Пф Сахарный сироп - 100 мл", "Чай каркаде - 20 гр", "Винная кислота - 6 гр"], method: "Закидываем в сотейник, выпариваем 100 мл от объема, остужаем, цедим." },
+                { name: "пф Кир", baseVol: 450, ingredients: ["Водка Organic - 100 мл", "Bv Land cassis - 100 мл", "Bv Land Blackberry - 100 мл", "Пф Гибискус - 150 мл"], method: "Перемешиваем и переливаем в бутылку." },
+                { name: "Пф Беллини", baseVol: 1200, ingredients: ["Пюре персик - 500 гр", "Сок персиковый - 250 мл", "Сахар - 250 гр", "Вода - 250 мл", "Пф лимонный фреш - 300 мл"], method: "Заливаем в сотейник, варим, цедим." },
+                { name: "Пф Мятная вода", baseVol: 700, ingredients: ["Вода - 500 мл", "Мята - 50 гр", "Пф микс кислот - 100 мл", "Пф сахарный сироп - 300 мл", "Бентонит - 2 гр"], method: "Перебиваем в блендере, добавляем бентонит, перемешиваем венчиком. В холод до осветления, сливаем чистое." },
+                { name: "Пф Фейхоа", baseVol: 550, ingredients: ["Пюре фейхоа - 200 гр", "Сок яблоко - 100 мл", "Пф лимонный фреш - 100 мл", "Сахар - 50 гр", "Вода - 150 мл"], method: "В сотейник, вывариваем, цедим в бутылку." },
+                { name: "пф Текила/клубника", baseVol: 250, ingredients: ["Клубника с/м - 100 гр", "Текила La Mision - 300 мл"], method: "Вакуум, су-вид 55°C на 4 часа." },
+                { name: "пф Кордиал мед", baseVol: 400, ingredients: ["Мед цветочный - 100 гр", "Вода - 300 мл"], method: "Перемешиваем в сотейнике на низких температурах." },
+                { name: "ПФ Карамельная пена", baseVol: 300, ingredients: ["Сливки 11% б/л - 300 мл", "Ксантан - 1 гр", "Сироп карамельный - 50 мл"], method: "Греем сливки (не до кипения), добавляем сироп и ксантан, мешаем венчиком, в кример." },
+                { name: "пф Тархун", baseVol: 200, ingredients: ["Эстрагон свежий - 100 гр", "Пф сахарный сироп - 300 мл", "Яблочная кислота - 5 гр"], method: "Перебиваем эстрагон с сиропом, цедим, балансируем кислотой." },
+                { name: "пф Молочная кислота", baseVol: 1000, ingredients: ["Молочная кислота 80% - 50 мл", "Вода - 1000 мл"], method: "Смешиваем все в мернике." },
+                { name: "Пф Лимончелло", baseVol: 800, ingredients: ["Водка Organic - 500 мл", "Лимоны - 400 гр (снять цедру, выжать фреш 150 мл)", "Пф сахарный сироп - 150 мл"], method: "Цедра в водке в су-вид 50°C 5 часов. Цедим, добавляем 150 мл фреша и 150 мл сиропа." },
+                { name: "Пф Маракуйя", baseVol: 700, ingredients: ["Пюре маракуйя - 400 гр", "Пф Сахарный сироп - 150 мл", "Пф Лимонный фреш - 150 мл"], method: "Смешать." },
+                { name: "Пф Тропики", baseVol: 700, ingredients: ["Пюре манго - 300 гр", "Пюре маракуйя - 150 гр", "Пф сахарный сироп - 100 мл", "Микс кислот - 100 мл"], method: "Смешать." },
+                { name: "Пф Малина/Персик", baseVol: 630, ingredients: ["Пюре малина - 200 гр", "Пф беллини - 300 мл", "Пф сахарный сироп - 100 мл", "Микс кислот - 100 мл"], method: "Смешать." },
+                { name: "ПФ Брусника", baseVol: 850, ingredients: ["Пюре брусники - 500 гр", "Пф сахарный сироп - 150 мл", "Вода - 200 мл"], method: "Смешать ингредиенты." },
+                { name: "Пф Арбуз-Мята", baseVol: 400, ingredients: ["Арбуз - 420 гр", "Лимон - 150 гр", "Сахарный сироп - 60 мл", "Мята - 15 гр"], method: "Перебиваем в блендере, фильтруем через сито." },
+                { name: "Пф Грог", baseVol: 500, ingredients: ["Вода - 500 мл", "Гвоздика - 6 шт", "Бадьян - 2 шт", "Апельсин - 6 долек", "Лимон - 6 долек", "Мед - 30 гр", "Варенье шишки - 10 гр", "Пф имбирь - 40 мл", "Водка - 100 мл"], method: "Проварить все ингредиенты в сотейнике при 80°C 10 минут." },
+                { name: "Пф Имбирь", baseVol: 100, ingredients: ["Имбирь - 100 гр", "Вода - 100 мл"], method: "Перебить имбирь и кипяток 1/1 в блендере, настоять 10 минут, отжать через марлю." },
+                { name: "Пф Лимонный фреш", baseVol: 200, ingredients: ["Лимоны - 500 гр"], method: "Отжать фреш через соковыжималку." },
+                { name: "Пф Лаймовый фреш", baseVol: 200, ingredients: ["Лаймы - 450 гр"], method: "Отжать фреш через соковыжималку." }
             ]
         };
 
-        // --- ЛОГИКА ВКЛАДОК И ПОИСКА ---
         let currentCategory = 'drinks';
         let currentFilter = 'all';
-        
         const cardsContainer = document.getElementById('cards-container');
         const checklistContainer = document.getElementById('checklist-container');
         const searchInput = document.getElementById('search');
@@ -356,9 +285,9 @@
                 if (hasCalc) {
                     calcHtml = `
                         <div class="calc-row" onclick="event.stopPropagation()">
-                            <span class="calc-label">Объем ПФ:</span>
+                            <span class="calc-label">Объем:</span>
                             <input type="number" class="calc-input" id="calc-${index}" value="${item.baseVol}" data-base="${item.baseVol}" oninput="updateMath(${index})">
-                            <span class="calc-unit">мл</span>
+                            <span class="calc-unit">мл/гр</span>
                         </div>
                     `;
                     ingListHtml = item.ingredients.map((ing, i) => {
@@ -437,22 +366,15 @@
 
         function filterCards() { renderCards(); }
 
-        // --- ЛОГИКА ЧЕК-ЛИСТА (ХРАНЕНИЕ В ТЕЛЕФОНЕ) ---
+        // --- ЧЕК-ЛИСТ ---
         let tasks = JSON.parse(localStorage.getItem('bartender_checklist')) || [];
 
-        function saveTasks() {
-            localStorage.setItem('bartender_checklist', JSON.stringify(tasks));
-        }
+        function saveTasks() { localStorage.setItem('bartender_checklist', JSON.stringify(tasks)); }
 
         function renderChecklist() {
             const listEl = document.getElementById('task-list');
             listEl.innerHTML = '';
-            
-            if(tasks.length === 0) {
-                listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center;">Задач пока нет. Добавь первую!</p>';
-                return;
-            }
-
+            if(tasks.length === 0) { listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center;">Задач пока нет. Добавь первую!</p>'; return; }
             tasks.forEach(task => {
                 const item = document.createElement('div');
                 item.className = `cl-item ${task.done ? 'done' : ''}`;
@@ -467,95 +389,36 @@
 
         function addTask() {
             const input = document.getElementById('new-task');
-            const text = input.value.trim();
-            if(text) {
-                tasks.push({ id: Date.now(), text: text, done: false });
-                input.value = '';
-                saveTasks();
-                renderChecklist();
+            if(input.value.trim()) {
+                tasks.push({ id: Date.now(), text: input.value.trim(), done: false });
+                input.value = ''; saveTasks(); renderChecklist();
             }
         }
-
-        function handleTaskEnter(e) {
-            if (e.key === 'Enter') addTask();
-        }
-
+        function handleTaskEnter(e) { if (e.key === 'Enter') addTask(); }
         window.toggleTask = function(id) {
             const task = tasks.find(t => t.id === id);
-            if(task) {
-                task.done = !task.done;
-                saveTasks();
-                renderChecklist();
-            }
+            if(task) { task.done = !task.done; saveTasks(); renderChecklist(); }
         }
+        window.deleteTask = function(id) { tasks = tasks.filter(t => t.id !== id); saveTasks(); renderChecklist(); }
 
-        window.deleteTask = function(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            saveTasks();
-            renderChecklist();
-        }
-
-        // --- МАГИЯ PWA (УСТАНОВКА НА ЭКРАН) ---
-        // 1. Создаем фальшивый Service Worker и Manifest на лету, чтобы браузер понял, что это "Приложение"
-        
-        // Базовая иконка (SVG)
+        // --- PWA (Установка на экран) ---
         const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000"/><text y="50%" x="50%" dominant-baseline="middle" text-anchor="middle" font-size="50">🍸</text></svg>`;
-        const encodedIcon = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgIcon)));
-
         const manifest = {
-            "name": "Тугай ТТК",
-            "short_name": "ТТК Бар",
-            "display": "standalone",
-            "background_color": "#000000",
-            "theme_color": "#000000",
-            "start_url": window.location.href,
-            "icons": [{"src": encodedIcon, "sizes": "512x512", "type": "image/svg+xml"}]
+            "name": "Тугай ТТК", "short_name": "ТТК Бар", "display": "standalone", "background_color": "#000000", "theme_color": "#000000",
+            "start_url": window.location.href, "icons": [{"src": "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgIcon))), "sizes": "512x512", "type": "image/svg+xml"}]
         };
+        document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'}))}">`);
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('fetch', e => {});`], {type: 'application/javascript'}))).catch(()=>{});
 
-        // Внедряем манифест
-        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-        const manifestUrl = URL.createObjectURL(manifestBlob);
-        document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${manifestUrl}">`);
-
-        // Внедряем пустой Service Worker (требование для установки)
-        const swCode = `self.addEventListener('fetch', function(e) {});`;
-        const swBlob = new Blob([swCode], {type: 'application/javascript'});
-        const swUrl = URL.createObjectURL(swBlob);
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(swUrl).catch(err => console.log('SW setup failed', err));
-        }
-
-        // 2. Логика кнопки "Установить на экран"
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
-
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Предотвращаем автоматический показ (особенно на Android)
-            e.preventDefault();
-            // Сохраняем событие, чтобы вызвать его по кнопке
-            deferredPrompt = e;
-            // Показываем кнопку
-            installBtn.style.display = 'block';
+            e.preventDefault(); deferredPrompt = e; installBtn.style.display = 'block';
         });
-
         installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                // Показываем системное окно установки
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installBtn.style.display = 'none'; // Прячем кнопку если установили
-                }
-                deferredPrompt = null;
-            }
+            if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') installBtn.style.display = 'none'; deferredPrompt = null; }
         });
 
-        // На iOS (Safari) событие beforeinstallprompt не работает. 
-        // Если хочешь, можно добавить всплывашку "Нажмите Поделиться -> На экран домой" специально для айфонов, 
-        // но пока приложение будет работать в браузере как часы.
-
-        // Запуск
         renderCards();
     </script>
 </body>
