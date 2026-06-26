@@ -9,8 +9,8 @@ from aiogram import Bot
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 # === КОНФИГУРАЦИЯ БОТА И ГРУППЫ ===
-BOT_TOKEN = "ТВОЙ_ТОКЕН_ОТ_БОТФАЗЕРА"
-CHAT_ID = "-100XXXXXXXXXX" # ID группы закупщика (обязательно с минусом, если это группа)
+BOT_TOKEN = "8982256451:AAFge6oA28B_khpKBAhYrQC6NbzQRFhusMk"
+CHAT_ID = "-1005307316313" # ID группы закупщика (обязательно с минусом, если это группа)
 
 # Инициализация
 bot = Bot(token=BOT_TOKEN)
