@@ -222,7 +222,7 @@
     <script>
         // ВНИМАНИЕ: УКАЖИ ЗДЕСЬ АДРЕС ТВОЕГО СЕРВЕРА С PYTHON! 
         // Если тестируешь на одном компе, оставь localhost.
-        const API_BASE_URL = "/api"; 
+        const API_BASE_URL = ""; 
         
         // --- БАЗА ДАННЫХ ТТК (Укорочена для примера, у тебя уже есть полная в исходнике) ---
         const data = {
@@ -362,37 +362,40 @@
             }
         }
 
-        async function fetchOrders() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/get_orders`);
-                const orders = await response.json();
-                const listEl = document.getElementById('active-orders-list');
-                
-                if (orders.length === 0) {
-                    listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center; margin-top:20px;">Список заявок пока пуст.</p>';
-                    return;
-                }
-
-                listEl.innerHTML = '';
-                orders.forEach(ord => {
-                    const commentHtml = ord.comment ? `<span style="color:#FF9F0A;">💬 ${ord.comment}</span>` : '';
-                    listEl.insertAdjacentHTML('beforeend', `
-                        <div class="order-card">
-                            <div class="order-info">
-                                <div class="order-title">${ord.item_name} <span style="color:var(--accent-pf); font-weight:bold;">— ${ord.quantity}</span></div>
-                                <div class="order-meta">
-                                    <span class="order-author">👤 ${ord.author_name}</span>
-                                    ${commentHtml}
-                                </div>
-                            </div>
-                            <button class="cl-delete" onclick="removeOrder(${ord.id})">✕</button>
-                        </div>
-                    `);
-                });
-            } catch (error) {
-                console.error("Ошибка загрузки заявок:", error);
-            }
+        // 2. Обновление функции fetchOrders (добавлена проверка на ошибки)
+async function fetchOrders() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/get_orders`);
+        if (!response.ok) throw new Error('Ошибка сети');
+        const orders = await response.json();
+        const listEl = document.getElementById('active-orders-list');
+        
+        if (orders.length === 0) {
+            listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center; margin-top:20px;">Список заявок пуст.</p>';
+            return;
         }
+
+        listEl.innerHTML = '';
+        orders.forEach(ord => {
+            const commentHtml = ord.comment ? `<span style="color:#FF9F0A;">💬 ${ord.comment}</span>` : '';
+            listEl.insertAdjacentHTML('beforeend', `
+                <div class="order-card">
+                    <div class="order-info">
+                        <div class="order-title">${ord.item_name} <span style="color:var(--accent-pf); font-weight:bold;">— ${ord.quantity}</span></div>
+                        <div class="order-meta">
+                            <span class="order-author">👤 ${ord.author_name}</span>
+                            ${commentHtml}
+                        </div>
+                    </div>
+                    <button class="cl-delete" onclick="removeOrder(${ord.id})">✕</button>
+                </div>
+            `);
+        });
+    } catch (error) {
+        console.error("Ошибка загрузки заявок:", error);
+    }
+}
+
 
         async function submitOrder() {
             const nameEl = document.getElementById('ord-name');
@@ -437,23 +440,27 @@
             } catch (e) { alert("Ошибка удаления"); }
         }
 
-        async function sendOrdersNow() {
-            if(!confirm("Сформировать и отправить текущий список закупщику в Telegram прямо сейчас? Это очистит базу.")) return;
-            
-            const btn = document.querySelector('.btn-send-now');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "⏳ Отправка..."; btn.disabled = true;
+       async function sendOrdersNow() {
+    if(!confirm("Отправить список закупщику и ОЧИСТИТЬ базу?")) return;
+    
+    const btn = document.querySelector('.btn-send-now');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ Отправка..."; btn.disabled = true;
 
-            try {
-                await fetch(`${API_BASE_URL}/send_now`, { method: 'POST' });
-                alert("✅ Успешно отправлено в Telegram!");
-                fetchOrders();
-            } catch (e) {
-                alert("Ошибка отправки");
-            } finally {
-                btn.innerHTML = originalText; btn.disabled = false;
-            }
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/send_now`, { method: 'POST' });
+        if(res.ok) {
+            alert("✅ Заявка улетела в Telegram!");
+            await fetchOrders(); // Сразу обновляем список (он станет пустым)
+        } else {
+            alert("❌ Ошибка при отправке");
         }
+    } catch (e) {
+        alert("Ошибка соединения с сервером");
+    } finally {
+        btn.innerHTML = originalText; btn.disabled = false;
+    }
+}
 
         // --- PWA Логика (Оригинальная) ---
         renderCards();
