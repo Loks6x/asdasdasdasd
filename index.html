@@ -122,8 +122,7 @@
         .order-info { display: flex; flex-direction: column; gap: 4px; flex: 1;}
         .order-title { font-size: 16px; font-weight: 600; }
         .order-meta { font-size: 13px; color: var(--text-sec); display: flex; gap: 8px; flex-wrap: wrap;}
-        .order-author { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-
+        
         /* Модальное окно (Представьтесь) */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; display: none; justify-content: center; align-items: center; }
         .modal-content { background: #1C1C1E; width: 90%; max-width: 320px; border-radius: 20px; padding: 24px; text-align: center; border: 1px solid var(--border-color); }
@@ -192,9 +191,11 @@
     <!-- Модальное окно авторизации для заявок -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-content">
-            <div class="modal-title">Представьтесь, пожалуйста</div>
+            <div class="modal-title">Вход (Раздел Заявки)</div>
             <input type="text" id="author-name-input" class="modal-input" placeholder="Ваше Имя (Бармен)">
-            <button class="modal-btn" onclick="saveAuthorName()">Продолжить</button>
+            <!-- ДОБАВЛЕНО ПОЛЕ ПАРОЛЯ -->
+            <input type="password" id="author-password-input" class="modal-input" placeholder="Пароль">
+            <button class="modal-btn" onclick="saveAuthorName()">Войти</button>
         </div>
     </div>
 
@@ -207,7 +208,7 @@
         ];
 
         // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-        const API_BASE_URL = window.location.origin; // Берет адрес сервера автоматически
+        const API_BASE_URL = window.location.origin; 
         let currentTab = 'drinks';
         let currentFilter = 'all';
         let orderSyncInterval = null;
@@ -218,16 +219,13 @@
         function switchTab(tab) {
             currentTab = tab;
             
-            // Кнопки вкладок
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`btn-${tab}`).classList.add('active');
 
-            // Контейнеры
             document.getElementById('cards-container').style.display = (tab === 'drinks' || tab === 'pf') ? 'grid' : 'none';
             document.getElementById('checklist-container').style.display = tab === 'checklist' ? 'flex' : 'none';
             document.getElementById('orders-container').style.display = tab === 'orders' ? 'flex' : 'none';
             
-            // Фильтры (показываем только для напитков)
             document.getElementById('drink-filters').style.display = tab === 'drinks' ? 'flex' : 'none';
             document.getElementById('search').style.display = (tab === 'drinks' || tab === 'pf') ? 'block' : 'none';
 
@@ -247,26 +245,20 @@
             renderCards();
         }
 
-        function filterCards() {
-            renderCards(); // Вызываем рендер, он сам учтет текст из поиска
-        }
+        function filterCards() { renderCards(); }
 
-        function toggleCard(cardElement) {
-            cardElement.classList.toggle('open');
-        }
+        function toggleCard(cardElement) { cardElement.classList.toggle('open'); }
 
         function renderCards() {
             const container = document.getElementById('cards-container');
             const searchText = document.getElementById('search').value.toLowerCase();
             
-            container.innerHTML = ''; // Очищаем
+            container.innerHTML = ''; 
 
-            // Фильтруем данные
             const filteredData = ttkData.filter(item => {
                 const matchesTab = item.tab === currentTab;
                 const matchesCategory = currentTab === 'drinks' ? (currentFilter === 'all' || item.category === currentFilter) : true;
                 const matchesSearch = item.title.toLowerCase().includes(searchText) || item.ingredients.join(' ').toLowerCase().includes(searchText);
-                
                 return matchesTab && matchesCategory && matchesSearch;
             });
 
@@ -275,24 +267,17 @@
                 return;
             }
 
-            // Отрисовываем
             filteredData.forEach(item => {
                 const tagsHtml = item.tags.map(t => `<span class="tag">${t}</span>`).join('');
                 const ingHtml = item.ingredients.map(i => `<li>${i}</li>`).join('');
-
                 const cardHtml = `
                     <div class="card" onclick="toggleCard(this)">
-                        <div class="card-header">
-                            <h3 class="card-title">${item.title}</h3>
-                            <span class="chevron">▼</span>
-                        </div>
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <div class="tags">${tagsHtml}</div>
-                                <div class="method"><strong>Метод:</strong> ${item.method}</div>
-                                <ul>${ingHtml}</ul>
-                            </div>
-                        </div>
+                        <div class="card-header"><h3 class="card-title">${item.title}</h3><span class="chevron">▼</span></div>
+                        <div class="card-content"><div class="card-content-inner">
+                            <div class="tags">${tagsHtml}</div>
+                            <div class="method"><strong>Метод:</strong> ${item.method}</div>
+                            <ul>${ingHtml}</ul>
+                        </div></div>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', cardHtml);
@@ -300,18 +285,15 @@
         }
 
         // ==========================================
-        // ЛОГИКА ЧЕК-ЛИСТА (Сохраняется в браузере)
+        // ЛОГИКА ЧЕК-ЛИСТА
         // ==========================================
         let tasks = JSON.parse(localStorage.getItem('tugai_tasks')) || [];
 
-        function saveTasks() {
-            localStorage.setItem('tugai_tasks', JSON.stringify(tasks));
-        }
+        function saveTasks() { localStorage.setItem('tugai_tasks', JSON.stringify(tasks)); }
 
         function renderTasks() {
             const list = document.getElementById('task-list');
             list.innerHTML = '';
-            
             tasks.forEach((task, index) => {
                 const item = document.createElement('div');
                 item.className = `cl-item ${task.done ? 'done' : ''}`;
@@ -335,24 +317,12 @@
             }
         }
 
-        function handleTaskEnter(event) {
-            if (event.key === 'Enter') addTask();
-        }
-
-        function toggleTask(index) {
-            tasks[index].done = !tasks[index].done;
-            saveTasks();
-            renderTasks();
-        }
-
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            saveTasks();
-            renderTasks();
-        }
+        function handleTaskEnter(event) { if (event.key === 'Enter') addTask(); }
+        function toggleTask(index) { tasks[index].done = !tasks[index].done; saveTasks(); renderTasks(); }
+        function deleteTask(index) { tasks.splice(index, 1); saveTasks(); renderTasks(); }
 
         // ==========================================
-        // ЛОГИКА ЗАЯВОК (БЭКЕНД ПИТОН)
+        // ЛОГИКА ЗАЯВОК И ПАРОЛЯ
         // ==========================================
         function getAuthorName() { 
             return localStorage.getItem('tugai_author_name'); 
@@ -361,10 +331,10 @@
         function checkAuthorAndLoadOrders() {
             const name = getAuthorName();
             if (!name) {
+                // Показываем окно ввода Имени и Пароля
                 document.getElementById('auth-modal').style.display = 'flex';
             } else {
                 fetchOrders();
-                // Обновляем список каждые 5 сек, если открыта вкладка заявок
                 if (orderSyncInterval) clearInterval(orderSyncInterval);
                 orderSyncInterval = setInterval(() => {
                     if (currentTab === 'orders') fetchOrders();
@@ -373,14 +343,26 @@
         }
 
         function saveAuthorName() {
-            const input = document.getElementById('author-name-input');
-            if (input.value.trim().length >= 2) {
-                localStorage.setItem('tugai_author_name', input.value.trim());
-                document.getElementById('auth-modal').style.display = 'none';
-                checkAuthorAndLoadOrders();
-            } else {
-                alert("Введите имя (минимум 2 символа)");
+            const nameInput = document.getElementById('author-name-input').value.trim();
+            const passInput = document.getElementById('author-password-input').value.trim();
+
+            if (nameInput.length < 2) {
+                alert("Введите ваше имя (минимум 2 символа)");
+                return;
             }
+            
+            // ПРОВЕРКА ПАРОЛЯ (Жестко задан как 12345678)
+            if (passInput !== "12345678") {
+                alert("Неверный пароль!");
+                return;
+            }
+
+            // Если пароль верный, сохраняем ИМЯ в память навсегда. 
+            // В следующий раз окно даже не появится.
+            localStorage.setItem('tugai_author_name', nameInput);
+            document.getElementById('auth-modal').style.display = 'none';
+            
+            checkAuthorAndLoadOrders();
         }
 
         async function fetchOrders() {
@@ -397,12 +379,13 @@
                 listEl.innerHTML = '';
                 orders.forEach(ord => {
                     const commentHtml = ord.comment ? `<span style="color:#FF9F0A;">💬 ${ord.comment}</span>` : '';
+                    
+                    // Убрали отображение имени из карточки
                     listEl.insertAdjacentHTML('beforeend', `
                         <div class="order-card">
                             <div class="order-info">
                                 <div class="order-title">${ord.item_name} <span style="color:var(--accent-pf); font-weight:bold;">— ${ord.quantity}</span></div>
                                 <div class="order-meta">
-                                    <span class="order-author">👤 ${ord.author_name}</span>
                                     ${commentHtml}
                                 </div>
                             </div>
@@ -432,8 +415,7 @@
             };
 
             const btn = document.querySelector('.btn-add-order');
-            btn.innerText = "⏳...";
-            btn.disabled = true;
+            btn.innerText = "⏳..."; btn.disabled = true;
 
             try {
                 const res = await fetch(`${API_BASE_URL}/api/add_order`, {
@@ -445,15 +427,9 @@
                 if (res.ok) {
                     nameEl.value = ''; qtyEl.value = ''; commEl.value = '';
                     fetchOrders();
-                } else {
-                    alert("Ошибка сервера при добавлении");
-                }
-            } catch (e) {
-                alert("Нет связи с сервером");
-            } finally {
-                btn.innerText = "Добавить в общий список";
-                btn.disabled = false;
-            }
+                } else { alert("Ошибка сервера при добавлении"); }
+            } catch (e) { alert("Нет связи с сервером"); } 
+            finally { btn.innerText = "Добавить в общий список"; btn.disabled = false; }
         }
 
         async function removeOrder(id) {
@@ -479,18 +455,11 @@
                     const err = await res.json();
                     alert("❌ Ошибка: " + (err.detail || "неизвестно"));
                 }
-            } catch (e) {
-                alert("Ошибка связи с сервером");
-            } finally {
-                btn.innerHTML = "🚀 Отправить закупщику прямо сейчас"; btn.disabled = false;
-            }
+            } catch (e) { alert("Ошибка связи с сервером"); } 
+            finally { btn.innerHTML = "🚀 Отправить закупщику прямо сейчас"; btn.disabled = false; }
         }
 
-        // Инициализация при старте
-        window.onload = () => {
-            renderCards(); // Отрисовываем напитки при загрузке
-        };
-
+        window.onload = () => { renderCards(); };
     </script>
 </body>
 </html>
