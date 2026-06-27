@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 # === КОНФИГУРАЦИЯ ===
 BOT_TOKEN = "8982256451:AAFge6oA28B_khpKBAhYrQC6NbzQRFhusMk"
-CHAT_ID = -1005307316313  
+CHAT_ID = -1004420801156 
 
 bot = Bot(token=BOT_TOKEN)
 scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
