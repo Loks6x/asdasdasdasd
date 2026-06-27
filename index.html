@@ -83,22 +83,10 @@
 
         .tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
         .tag { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--text-sec); }
-        .section-title { color: var(--text-sec); font-size: 13px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; letter-spacing: 0.5px; }
+        
         .method { font-size: 15px; line-height: 1.5; color: var(--text-main); margin-bottom: 10px; }
         ul { margin: 0 0 16px 0; padding-left: 20px; color: var(--text-main); font-size: 15px; line-height: 1.6;}
         li { margin-bottom: 4px; }
-
-        .calc-row {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-            background: rgba(48, 209, 88, 0.1); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(48, 209, 88, 0.3);
-        }
-        .calc-label { font-size: 14px; color: var(--accent-pf); font-weight: 600; }
-        .calc-input {
-            background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: #fff;
-            padding: 6px 10px; border-radius: 8px; width: 80px; font-size: 16px; font-weight: 600; text-align: center; outline: none;
-        }
-        .calc-input:focus { border-color: var(--accent-pf); }
-        .pf-ing-amount { font-weight: 700; color: var(--accent-pf); transition: color 0.2s;}
 
         /* Стили чек-листа */
         #checklist-container { display: none; width: 100%; flex-direction: column; gap: 16px; }
@@ -142,12 +130,6 @@
         .modal-title { font-size: 20px; font-weight: 600; margin-bottom: 15px; }
         .modal-input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: black; color: white; font-size: 16px; margin-bottom: 15px; outline: none; text-align: center; }
         .modal-btn { background: var(--accent); color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
-
-        #install-btn {
-            display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: white; color: black; border: none; padding: 12px 24px; border-radius: 20px;
-            font-size: 15px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1000; cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -202,35 +184,179 @@
             </div>
 
             <div class="order-list" id="active-orders-list">
-                <!-- Сюда подгружаются заявки с сервера -->
                 <p style="color:var(--text-sec); text-align:center;">Загрузка заявок...</p>
             </div>
         </div>
     </div>
 
-    <button id="install-btn">Установить приложение</button>
-
     <!-- Модальное окно авторизации для заявок -->
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-content">
             <div class="modal-title">Представьтесь, пожалуйста</div>
-            <input type="text" id="author-name-input" class="modal-input" placeholder="Ваше Имя">
+            <input type="text" id="author-name-input" class="modal-input" placeholder="Ваше Имя (Бармен)">
             <button class="modal-btn" onclick="saveAuthorName()">Продолжить</button>
         </div>
     </div>
 
     <script>
-        // ВНИМАНИЕ: УКАЖИ ЗДЕСЬ АДРЕС ТВОЕГО СЕРВЕРА С PYTHON! 
-        // Если тестируешь на одном компе, оставь localhost.
-        const API_BASE_URL = window.location.origin; // Автоматически берет адрес сервера
-        
-        let currentCategory = 'drinks';
+        // База данных меню (Замени на свои реальные коктейли и ПФ)
+        const ttkData = [
+            { id: 1, tab: 'drinks', category: 'cocktail', title: 'Апероль Шприц', method: 'Билд в винный бокал со льдом. Украсить долькой апельсина.', tags: ['Лед', 'Апельсин'], ingredients: ['Апероль - 40мл', 'Просекко - 80мл', 'Газировка - 20мл'] },
+            { id: 2, tab: 'drinks', category: 'lemonade', title: 'Лимонад Маракуйя', method: 'Шейк, перелить в хайбол.', tags: ['Лед', 'Лимон'], ingredients: ['Пюре Маракуйя - 30г', 'Сок лимона - 15мл', 'Сироп сахарный - 15мл', 'Содовая - 150мл'] },
+            { id: 3, tab: 'pf', category: 'pf', title: 'Сахарный сироп 1:1', method: 'Смешать сахар и горячую воду до растворения. Остудить.', tags: ['Заготовка', 'Хранить в холодильнике'], ingredients: ['Сахар - 1000г', 'Вода - 1000мл'] }
+        ];
+
+        // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+        const API_BASE_URL = window.location.origin; // Берет адрес сервера автоматически
+        let currentTab = 'drinks';
+        let currentFilter = 'all';
         let orderSyncInterval = null;
 
-        // ... (Тут твои функции renderCards, switchTab и т.д. остаются без изменений) ...
-        // Но логику заявок ниже ОБНОВИ ПОЛНОСТЬЮ:
+        // ==========================================
+        // ЛОГИКА ВКЛАДОК (TABS) И КАРТОЧЕК
+        // ==========================================
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Кнопки вкладок
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${tab}`).classList.add('active');
 
-        function getAuthorName() { return localStorage.getItem('tugai_author_name'); }
+            // Контейнеры
+            document.getElementById('cards-container').style.display = (tab === 'drinks' || tab === 'pf') ? 'grid' : 'none';
+            document.getElementById('checklist-container').style.display = tab === 'checklist' ? 'flex' : 'none';
+            document.getElementById('orders-container').style.display = tab === 'orders' ? 'flex' : 'none';
+            
+            // Фильтры (показываем только для напитков)
+            document.getElementById('drink-filters').style.display = tab === 'drinks' ? 'flex' : 'none';
+            document.getElementById('search').style.display = (tab === 'drinks' || tab === 'pf') ? 'block' : 'none';
+
+            if (tab === 'drinks' || tab === 'pf') {
+                renderCards();
+            } else if (tab === 'orders') {
+                checkAuthorAndLoadOrders();
+            } else if (tab === 'checklist') {
+                renderTasks();
+            }
+        }
+
+        function setFilter(filter, el) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+            el.classList.add('active');
+            renderCards();
+        }
+
+        function filterCards() {
+            renderCards(); // Вызываем рендер, он сам учтет текст из поиска
+        }
+
+        function toggleCard(cardElement) {
+            cardElement.classList.toggle('open');
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            const searchText = document.getElementById('search').value.toLowerCase();
+            
+            container.innerHTML = ''; // Очищаем
+
+            // Фильтруем данные
+            const filteredData = ttkData.filter(item => {
+                const matchesTab = item.tab === currentTab;
+                const matchesCategory = currentTab === 'drinks' ? (currentFilter === 'all' || item.category === currentFilter) : true;
+                const matchesSearch = item.title.toLowerCase().includes(searchText) || item.ingredients.join(' ').toLowerCase().includes(searchText);
+                
+                return matchesTab && matchesCategory && matchesSearch;
+            });
+
+            if (filteredData.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-sec); text-align:center; width:100%;">Ничего не найдено</p>';
+                return;
+            }
+
+            // Отрисовываем
+            filteredData.forEach(item => {
+                const tagsHtml = item.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                const ingHtml = item.ingredients.map(i => `<li>${i}</li>`).join('');
+
+                const cardHtml = `
+                    <div class="card" onclick="toggleCard(this)">
+                        <div class="card-header">
+                            <h3 class="card-title">${item.title}</h3>
+                            <span class="chevron">▼</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-content-inner">
+                                <div class="tags">${tagsHtml}</div>
+                                <div class="method"><strong>Метод:</strong> ${item.method}</div>
+                                <ul>${ingHtml}</ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // ==========================================
+        // ЛОГИКА ЧЕК-ЛИСТА (Сохраняется в браузере)
+        // ==========================================
+        let tasks = JSON.parse(localStorage.getItem('tugai_tasks')) || [];
+
+        function saveTasks() {
+            localStorage.setItem('tugai_tasks', JSON.stringify(tasks));
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+            
+            tasks.forEach((task, index) => {
+                const item = document.createElement('div');
+                item.className = `cl-item ${task.done ? 'done' : ''}`;
+                item.innerHTML = `
+                    <div class="cl-checkbox" onclick="toggleTask(${index})"></div>
+                    <div class="cl-text" onclick="toggleTask(${index})">${task.text}</div>
+                    <button class="cl-delete" onclick="deleteTask(${index})">✕</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addTask() {
+            const input = document.getElementById('new-task');
+            const text = input.value.trim();
+            if (text) {
+                tasks.unshift({ text, done: false });
+                input.value = '';
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function handleTaskEnter(event) {
+            if (event.key === 'Enter') addTask();
+        }
+
+        function toggleTask(index) {
+            tasks[index].done = !tasks[index].done;
+            saveTasks();
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+            renderTasks();
+        }
+
+        // ==========================================
+        // ЛОГИКА ЗАЯВОК (БЭКЕНД ПИТОН)
+        // ==========================================
+        function getAuthorName() { 
+            return localStorage.getItem('tugai_author_name'); 
+        }
 
         function checkAuthorAndLoadOrders() {
             const name = getAuthorName();
@@ -238,8 +364,11 @@
                 document.getElementById('auth-modal').style.display = 'flex';
             } else {
                 fetchOrders();
+                // Обновляем список каждые 5 сек, если открыта вкладка заявок
                 if (orderSyncInterval) clearInterval(orderSyncInterval);
-                orderSyncInterval = setInterval(fetchOrders, 5000); // Обновление раз в 5 сек
+                orderSyncInterval = setInterval(() => {
+                    if (currentTab === 'orders') fetchOrders();
+                }, 5000); 
             }
         }
 
@@ -261,7 +390,7 @@
                 const listEl = document.getElementById('active-orders-list');
                 
                 if (orders.length === 0) {
-                    listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center; margin-top:20px;">Список заявок пуст.</p>';
+                    listEl.innerHTML = '<p style="color:var(--text-sec); text-align:center; margin-top:20px;">Список заявок пуст. Добавь что-нибудь!</p>';
                     return;
                 }
 
@@ -302,6 +431,10 @@
                 author_name: getAuthorName()
             };
 
+            const btn = document.querySelector('.btn-add-order');
+            btn.innerText = "⏳...";
+            btn.disabled = true;
+
             try {
                 const res = await fetch(`${API_BASE_URL}/api/add_order`, {
                     method: 'POST',
@@ -317,10 +450,14 @@
                 }
             } catch (e) {
                 alert("Нет связи с сервером");
+            } finally {
+                btn.innerText = "Добавить в общий список";
+                btn.disabled = false;
             }
         }
 
         async function removeOrder(id) {
+            if(!confirm("Удалить эту позицию?")) return;
             try {
                 await fetch(`${API_BASE_URL}/api/delete_order/${id}`, { method: 'DELETE' });
                 fetchOrders();
@@ -328,7 +465,7 @@
         }
 
         async function sendOrdersNow() {
-            if(!confirm("Отправить закупщику и очистить список?")) return;
+            if(!confirm("Отправить список закупщику в Телеграм прямо сейчас и очистить базу?")) return;
             
             const btn = document.querySelector('.btn-send-now');
             btn.innerText = "⏳ Отправка..."; btn.disabled = true;
@@ -336,7 +473,7 @@
             try {
                 const res = await fetch(`${API_BASE_URL}/api/send_now`, { method: 'POST' });
                 if (res.ok) {
-                    alert("✅ Отправлено!");
+                    alert("✅ Успешно отправлено в Telegram!");
                     fetchOrders();
                 } else {
                     const err = await res.json();
@@ -349,8 +486,11 @@
             }
         }
 
-        // --- PWA Логика (Оригинальная) ---
-        renderCards();
+        // Инициализация при старте
+        window.onload = () => {
+            renderCards(); // Отрисовываем напитки при загрузке
+        };
+
     </script>
 </body>
 </html>
