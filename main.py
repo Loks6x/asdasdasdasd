@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 # === КОНФИГУРАЦИЯ ===
 BOT_TOKEN = "8982256451:AAFge6oA28B_khpKBAhYrQC6NbzQRFhusMk"
-CHAT_ID = -1005307316313  # Если "Chat not found", проверь ID через @getmyid_bot в группе!
+CHAT_ID = -1004420801156  # Если "Chat not found", проверь ID через @getmyid_bot в группе!
 
 bot = Bot(token=BOT_TOKEN)
 scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
